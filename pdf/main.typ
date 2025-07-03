@@ -21,7 +21,7 @@
   affiliations: (
     "UOB": "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
   ),
-  abstract: [Amplicon Sequencing has become a dominant method for genomic surveillance. However, the lack of defined file format has lead to incompatibility issues with downstream analysis, and constantly evolving formats. Here we describe a universal specification for the primer.bed and the corresponding reference.fasta files, which will aid compatibility.  ],
+  abstract: [DNA sequencing of tiled amplicon PCR products is an important approach for fast and cost-effective pathogen genome surveillance. Accurate bioinformatic analysis of tiled PCR amplicon sequences depends on knowledge of primer sequences, amplicon a layout and coordinates with respect to a reference genome. Analysis and reuse of tiled amplicon sequencing data is currently hindered by the lack of defined file formats for describing primer schemes, a problem highlighted by the proliferation of primer schemes for SARS-CoV-2 genomes during the COVID-19 pandemic. We describe a text-based specification for describing sequencing primers and amplicons with respect to one or more reference chromosomes. This specification formalises an existing widely-used primer scheme interchange format initially adopted by the PrimalScheme primer design tool, but since adopted by a growing ecosystem of community tooling. This specification designates the use of a primer.bed file in Browser Extensible Data (BED) format and accompanying reference.fasta sequence file in order to define a primer scheme.],
   keywords: ("Data standards", "Primer Schemes", "Amplicon Sequencing")
 )
 
