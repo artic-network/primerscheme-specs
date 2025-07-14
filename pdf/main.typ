@@ -1,4 +1,3 @@
-#import "@preview/starter-journal-article:0.4.0": article, author-meta
 #import "@preview/pubmatter:0.2.1"
 
 #show link: underline
@@ -7,31 +6,41 @@
 #set heading(numbering: "1.")
 #set text(region: "GB")
 
-#show: article.with(
-  title: "Primer Scheme specification v3.0.0-alpha",
-  authors: (
-    "Christopher Kent": author-meta(
-      "UOB",
+
+
+#let fm = pubmatter.load((
+  author: (
+    (
+      name: "Christopher Kent",
       email: "chrisgkent@protonmail.com",
-      orcid: "0000-0003-4269-0153",
-      corresponding: true,
+      orcid: "0000-0002-7859-8394",
+      affiliations: "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
+      url: "https://github.com/ChrisgKent",
     ),
-    "Bede Constantinides": author-meta(
-      "UOB",
-      email: "b@bede.im",
+    (
+      name: "Bede Constantinides",
       orcid: "0000-0002-3480-3819",
-      corresponding: false,
+      affiliations: "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
     ),
   ),
-  affiliations: (
-    "UOB": "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
-  ),
+  title: "Primer Scheme specifications v3.0.0-alpha",
+  date: datetime(year: 2025, month: 07, day: 14),
   abstract: [DNA sequencing of tiled amplicon PCR products is an important approach for fast and cost-effective pathogen genome surveillance. Accurate bioinformatic analysis of tiled PCR amplicon sequences depends on knowledge of primer sequences, amplicon layout and coordinates with respect to a reference genome. Analysis and reuse of tiled amplicon sequencing data is currently hindered by the lack of defined file formats for describing primer schemes, a problem highlighted by the proliferation of primer schemes for SARS-CoV-2 genomes during the COVID-19 pandemic. We describe a text-based specification for describing sequencing primers and amplicons with respect to one or more reference chromosomes. This specification formalises an existing widely-used primer scheme interchange format initially adopted by the PrimalScheme primer design tool, but since adopted by a growing ecosystem of community tooling. This specification designates the use of a primer.bed file in Browser Extensible Data (BED) format and accompanying reference.fasta sequence file in order to define a primer scheme.],
   keywords: ("Data standards", "Primer Schemes", "Amplicon Sequencing"),
-)
+))
 
-#outline()
+#let theme = (color: black.darken(20%), font: "Noto Sans")
+#state("THEME").update(theme)
+#set page(header: pubmatter.show-page-header(fm), footer: pubmatter.show-page-footer(fm))
+
+
+#pubmatter.show-title-block(fm)
+#pubmatter.show-abstract-block(fm)
+
+#outline(indent: auto)
+
 #pagebreak()
+
 = primer.bed file
 A primer.bed file describes an amplicon sequencing primer scheme in machine and human readable tabular format. Together with an accompanying reference.fasta, its purpose is to encapsulate all of the information needed to _i)_ acquire the primers from suppliers or custom oligonucleotide synthesis, _ii)_ combine the primers correctly to reproduce a pooled primerscheme, and _iii)_ facilitate correct and reproducible bioinformatic analysis of resulting sequencing data. It therefore incorporates both wet lab and analytical elements. This information includes primer sequences, primer pools, coordinates and orientation with respect to a reference sequence, and optionally relative primer concentrations.
 
