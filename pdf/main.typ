@@ -61,7 +61,7 @@ Comment lines are minimally parsed, but can optionally contain a scheme-level (k
     columns: 5,
     align: (left, left, left, left, right),
     table.header[*Column*][*Field name*][*Type*][*Brief description*][*Restrictions*],
-    [1], [chrom], [String], [Chromosome name], [`[A-Za-z0-9_]`],
+    [1], [chrom], [String], [Chromosome name], [`[A-Za-z0-9._]`],
     [2], [primerStart], [Integer], [Primer start position (zero-based, half-open)], [Positive integer (`u64`)],
     [3], [primerEnd], [Integer], [Primer end position (zero-based, half-open)], [Positive integer (`u64`)],
     [4], [primerName], [String], [Primer name], [`[a-zA-Z0-9\-]+_[0-9]+_(LEFT|RIGHT|PROBE)_[0-9]+`],
