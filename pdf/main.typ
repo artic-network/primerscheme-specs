@@ -29,7 +29,7 @@
       ),
     ),
   ),
-  title: "ARTIC primer scheme specifications v3.0.0-alpha",
+  title: "ARTIC primer scheme specification v3.0.0-alpha",
   date: datetime(year: 2025, month: 07, day: 14),
   abstract: [Polymerase chain reaction (PCR) followed by amplicon DNA sequencing enables fast, sensitive and cost-effective molecular characterisation of target genes and genomes.
     PCR involves the selective amplification of a target genomic region (amplicons) using pairs of single-stranded oligonucleotide primers, complementary to opposing strands flanking the target region. Multiple regions can be simultaneously amplified in a single reaction via multiplexed PCR, with multiple reactions enabling tiling amplicon sequencing (ARTIC sequencing), facilitating efficient enrichment of entire microbial genomes for whole genome sequencing. However, accurately reproducing a primer scheme and the corresponding bioinformatic analysis of amplicon sequencing data depends on knowledge of primer sequences, amplicon layout, and their coordinates with respect to a reference sequence. Analysis and reuse of amplicon sequencing data is currently hindered by the lack of a clearly defined data interchange format for primer scheme definitions, a problem highlighted by the proliferation of SARS-CoV-2 primer schemes during the COVID-19 pandemic. Here, we describe a text-based specification for describing primer sequences and locations with respect to a reference sequence. This specification formalises and expands on the existing interchange format initially used in the PrimalScheme primer design tool, and since adopted by a growing ecosystem of tooling. This specification designates the use of a primer.bed file, based on the Browser Extensible Data (BED) text format, and an accompanying reference.fasta text file for defining primer schemes, and probe-based qPCR assays.
@@ -97,17 +97,17 @@ The start position of the primer on the `chrom` using BED-like zero-based, half-
 The non-inclusive end position of the primer on the `chrom` using BED-like zero-based, half-open coordinates. Must be greater than #highlight[`primerStart`].
 
 === #highlight[`primerName`]
-The name of the primer in the form "`{prefix}_{ampliconNumber}_{direction}_{primerNumber}`".
+The name of the primer in the form "`{prefix}_{ampliconNumber}_{class}_{primerNumber}`".
 - #highlight[`prefix`]: Must match regex `[a-zA-Z0-9\-]`. See best practices
 - #highlight[`ampliconNumber`]: The number of the amplicon for its relevant #highlight[`chrom`]. Must be a positive integer incrementing from 1.
-- #highlight[`direction`]: The direction of the primer. Must be either `LEFT`, `RIGHT` or `PROBE`.
+- #highlight[`primerClass`]: The class of the primer. Must be either `LEFT`, `RIGHT` or `PROBE`.
 - #highlight[`primerNumber`]: The number of the primer. Must be a positive integer incrementing from 1.
 
 === #highlight[`pool`]
 The PCR pool the primer belongs to. Must be a positive integer incrementing from 1 #footnote["Existing schemes/literature use refer to \`pool 1 and pool 2\`. Therefore 1-based indexing is expected"].
 
 === #highlight[`strand`]
-The strand of the primer must be either #highlight[+] or #highlight[-]. It must correspond to the #highlight[direction] component of the #highlight[primerName] (see the description of #highlight[primerName] above). #highlight[LEFT] and #highlight[RIGHT] primers must be #highlight[+] and #highlight[-] respectively, while #highlight[PROBE] can be either.
+The strand of the primer must be either #highlight[+] or #highlight[-]. It must correspond to the #highlight[class] component of the #highlight[primerName] (see the description of #highlight[primerName] above). #highlight[LEFT] and #highlight[RIGHT] primers must be #highlight[+] and #highlight[-] respectively, while #highlight[PROBE] can be either.
 === #highlight[`primerSeq`]
 The sequence of the primer in the 5' to 3' direction. Unrestricted to contain any non-whitespace ASCII character #footnote["This is intentionally unrestricted (rather than IUPAC-only) to allow Primer Modification. Such as `/56-FAM/{primerSeq}` to represent 5' 6-FAM fluorescent dye labelled probe"].
 
