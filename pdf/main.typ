@@ -6,7 +6,14 @@
 #set heading(numbering: "1.")
 #set text(region: "GB")
 
-
+#let bp_str = block(
+  "Best practices are not required by the specification, however are strongly recommend.",
+  fill: rgb(35, 157, 173, 20%),
+  inset: 8pt,
+  radius: 2pt,
+  width: 100%,
+  breakable: false,
+)
 
 #let fm = pubmatter.load((
   author: (
@@ -54,13 +61,13 @@ A primer.bed file describes a primer scheme in machine and human readable tabula
 
 == Format overview
 
-`primer.bed` files are tab-delimited ASCII text files. Each line can either represent a _comment line_ (prefixed with #highlight[`#`]) or a _record line_ (`BedLine`), representing a single unique oligonucleotide primer or probe associated with an amplicon. An amplicon comprises at least two primer record lines each describing primers on different strands. A compliant `primer.bed` file contains one or more amplicons.
+`primer.bed` files are tab-delimited ASCII text files. Each line can either represent a _comment line_ (prefixed with "`#`") or a _record line_ (`BedLine`), representing a single unique oligonucleotide primer or probe associated with an amplicon. An amplicon comprises at least two primer record lines each describing primers on different strands.
 
 The format of `primer.bed` is based on Browser Extensible Data (#link("https://samtools.github.io/hts-specs/BEDv1.pdf")[BED]) specification, with each oligonucleotide being treated as a genomic region, enabling compatibility with common BED file tooling.
 
 == Comment Line
 
-Comment lines are minimally parsed, but can optionally contain a scheme-level (key, value) pair. To this end, comment lines containing a single "#highlight[`=`]" will be split, with the left and right sides representing a scheme-level key and value respectively.
+Comment lines are minimally parsed, but can optionally contain a scheme-level (key, value) pair. To this end, comment lines containing a single "`=`" will be split, with the left and right sides representing a scheme-level key and value respectively.
 
 == record line (BedLine) field descriptions
 
@@ -186,25 +193,21 @@ An eight column #highlight[`primer.bed`] file. Showing a fictional qPCR assay. T
     ```],
 )
 
-== Best Practices
+== primer.bed best practices
 
-`primer.bed` contain information about how to replicate the primer pools used in multiplexed PCR. They do not contain information about the PCR protocol, input material, or sequencing method and analysis. Therefore, additional information is needed for true reproducibility.
+#bp_str
 
-=== Other metadata standards
+=== Use dedicated tooling
 
-To explicitly differentiate different versions of #highlight[`primer.bed`], this spec is designed to fit into larger metadata standards, such as #link("https://github.com/ChrisgKent/primal-page")[primal-page] with #link("https://labs.primalscheme.com")[PrimalScheme Labs] or #link("https://github.com/pha4ge/primaschema")[primaschema] with #link("https://github.com/pha4ge/primer-schemes")[pha4ge primer-schemes]
+While CSV parsing modules should be compatible with parsing bedfiles, they do not carry out valuation, and require additional work to parse #highlight[primerAttribute] and #highlight[primerNames]. #link("https://github.com/ChrisgKent/primalbedtools")[`primalbedtools`] is an open source python package that carries out, parsing, schema validation and conversion, and common operations on #highlight[`primer.bed`] files.
 
-=== Other tooling
+=== Use unique names were possible
 
-#link("https://github.com/ChrisgKent/primalbedtools")[`primalbedtools`] is a python package that carries out schema validation and conversion, and common operations on #highlight[`primer.bed`] files.
+The #highlight[`prefix`] component of #highlight[`primerName`] should be as unique as possible (ideally a short uuid, i.e. #highlight[`359ba5`]) and different for each #highlight[`chrom`] and each scheme generation run. Using #highlight[`prefix`] such as "scheme" or "sars-cov-2" might seen tempting, however, will result in a freezer / LIMS full of very similar #highlight[`primerName`]s leading to confusion and pooling mistakes. As an example a primer labelled `scheme_1_LEFT_1` could belong to any scheme.
 
-=== #highlight[`primerName:prefix`]
-The #highlight[`primerName:prefix`] should be as unique as possible (for example a short uuid, #highlight[`359ba5`]) and different for each #highlight[`chrom`] and each scheme generation run.
-- Using #highlight[`primerName:prefix`] like #highlight[`scheme`] or #highlight[`sars-cov-2`] might seen easier, however, will result in a freezer / LIMS full of similar names leading to pooling mistakes.
+=== The comment lines
 
-=== comment line
-
-The `comment line`'s #highlight[`key=value`] pattern undergoes limited validation, and therefore should be not be critical for tooling. A suitable use case might be to document custom #highlight[`primerAttributes`]. Another use is providing aliases for different #highlight[`chrom`].
+The `comment line`'s #highlight[`key=value`] pattern undergoes limited validation in the specification, and therefore tooling should implement robust error handling, and should avoid using the `comment line` for critical metadata. A suitable use case might be to document custom #highlight[`primerAttributes`] or providing human readable aliases for different #highlight[`chrom`]s.
 
 
 = reference.fasta file
@@ -214,7 +217,7 @@ A #highlight[`reference.fasta`] file contains the DNA sequences of all the prima
 
 #highlight[`reference.fasta`] files are typical ASCII-encoded #highlight[`.fasta`] #link("https://en.wikipedia.org/wiki/FASTA_format")[format files], with text representing the nucleotide sequence of the reference. Each genome starts with a header line (starting with #highlight[`>`]) that denotes the id of the genome, followed by lines of nucleotide data.
 
-All #highlight[`chrom`] fields of the record lines must have a corresponding id in the #highlight[`reference.fasta`].
+All #highlight[`chrom`] fields of the record lines must have a corresponding `id` in the #highlight[`reference.fasta`].
 
 
 == Examples
@@ -254,9 +257,31 @@ The corresponding #highlight[`primer.bed`] file should contain the #highlight[`c
   ],
 )
 
-The corresponding #highlight[`primer.bed`] file should contain the #highlight[`chrom`] #highlight[`MN908947.3`] and #highlight[`NC_006432.1`]
+The corresponding #highlight[`primer.bed`] file should contain `BedLines` with the #highlight[`chrom`] `MN908947.3` and `NC_006432.1`
 
 
-== Best practices
+== reference.fasta best practices
 
-As the `reference.fasta` is often used for referenced-based assembly, using high quality genome with few `Ns` or ambiguous bases is advisable. Using RNA sequences in the `reference.fasta` is not recommended, as DNA is expected.
+#bp_str
+
+=== Use high quality genomes
+The genome contained in the `reference.fasta` file is commonly used for referenced-based assembly. Therefore, using a genome with large numbers of `Ns` or ambiguous bases can lead consensus sequence errors.
+
+=== Use DNA genomes
+DNA sequences are expected and should be the default. As by the nature of PCR, the amplicons and corresponding sequencing data should be DNA. However, RNA is allowed due to possible unforeseen applications.
+
+=== Use canonical/publicly genomes
+The `reference.fasta` will need to be shared to reproduce the downstream analysis. Therefore, using property or restricted will inhibit sharing.
+
+
+= Further comments
+
+== Use encompassing metadata standards
+This specification simply lays out the structure and formatting of the `primer.bed` and `reference.fasta` file, the minimal files used replicate the primer pools, and analysis used in multiplexed PCR.
+
+For true reproducibility, each primer scheme should have an explicit name and semantic versioning system, to track changes to the scheme. Therefore, larger metadata standards are require such as such as #link("https://github.com/ChrisgKent/primal-page")[primal-page] with #link("https://labs.primalscheme.com")[PrimalScheme Labs] or #link("https://github.com/pha4ge/primaschema")[primaschema] with #link("https://github.com/pha4ge/primer-schemes")[pha4ge primer-schemes].
+
+
+
+
+
