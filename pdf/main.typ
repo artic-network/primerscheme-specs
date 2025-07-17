@@ -14,18 +14,26 @@
       name: "Christopher Kent",
       email: "chrisgkent@protonmail.com",
       orcid: "0000-0002-7859-8394",
-      affiliations: "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
+      affiliations: (
+        "The ARTICnetwork Collaborative Award",
+        "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
+      ),
       url: "https://github.com/ChrisgKent",
     ),
     (
       name: "Bede Constantinides",
       orcid: "0000-0002-3480-3819",
-      affiliations: "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
+      affiliations: (
+        "The ARTICnetwork Collaborative Award",
+        "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
+      ),
     ),
   ),
-  title: "Primer Scheme specifications v3.0.0-alpha",
+  title: "ARTIC primer scheme specification v3.0.0-alpha",
   date: datetime(year: 2025, month: 07, day: 14),
-  abstract: [DNA sequencing of tiled amplicon PCR products is an important approach for fast and cost-effective pathogen genome surveillance. Accurate bioinformatic analysis of tiled PCR amplicon sequences depends on knowledge of primer sequences, amplicon layout and coordinates with respect to a reference genome. Analysis and reuse of tiled amplicon sequencing data is currently hindered by the lack of defined file formats for describing primer schemes, a problem highlighted by the proliferation of primer schemes for SARS-CoV-2 genomes during the COVID-19 pandemic. We describe a text-based specification for describing sequencing primers and amplicons with respect to one or more reference chromosomes. This specification formalises an existing widely-used primer scheme interchange format initially adopted by the PrimalScheme primer design tool, but since adopted by a growing ecosystem of community tooling. This specification designates the use of a primer.bed file in Browser Extensible Data (BED) format and accompanying reference.fasta sequence file in order to define a primer scheme.],
+  abstract: [Polymerase chain reaction (PCR) followed by amplicon DNA sequencing enables fast, sensitive and cost-effective molecular characterisation of target genes and genomes.
+    PCR involves the selective amplification of a target genomic region (amplicons) using pairs of single-stranded oligonucleotide primers, complementary to opposing strands flanking the target region. Multiple regions can be simultaneously amplified in a single reaction via multiplexed PCR, with multiple reactions enabling tiling amplicon sequencing (ARTIC sequencing), facilitating efficient enrichment of entire microbial genomes for whole genome sequencing. However, accurately reproducing a primer scheme and the corresponding bioinformatic analysis of amplicon sequencing data depends on knowledge of primer sequences, amplicon layout, and their coordinates with respect to a reference sequence. Analysis and reuse of amplicon sequencing data is currently hindered by the lack of a clearly defined data interchange format for primer scheme definitions, a problem highlighted by the proliferation of SARS-CoV-2 primer schemes during the COVID-19 pandemic. Here, we describe a text-based specification for describing primer sequences and locations with respect to a reference sequence. This specification formalises and expands on the existing interchange format initially used in the PrimalScheme primer design tool, and since adopted by a growing ecosystem of tooling. This specification designates the use of a primer.bed file, based on the Browser Extensible Data (BED) text format, and an accompanying reference.fasta text file for defining primer schemes, and probe-based qPCR assays.
+    This specification is intended to facilitate the exchange of primer scheme definitions for oligonucleotide synthesis, wet-lab and bioinformatic analysis use cases.],
   keywords: ("Data standards", "Primer Schemes", "Amplicon Sequencing"),
 ))
 
@@ -42,7 +50,7 @@
 #pagebreak()
 
 = primer.bed file
-A primer.bed file describes an amplicon sequencing primer scheme in machine and human readable tabular format. Together with an accompanying reference.fasta, its purpose is to encapsulate all of the information needed to _i)_ acquire the primers from suppliers or custom oligonucleotide synthesis, _ii)_ combine the primers correctly to reproduce a pooled primerscheme, and _iii)_ facilitate correct and reproducible bioinformatic analysis of resulting sequencing data. It therefore incorporates both wet lab and analytical elements. This information includes primer sequences, primer pools, coordinates and orientation with respect to a reference sequence, and optionally relative primer concentrations.
+A primer.bed file describes a primer scheme in machine and human readable tabular format. Together with an accompanying reference.fasta, its purpose is to encapsulate all of the information needed to _i)_ acquire the primers from suppliers or custom oligonucleotide synthesis, _ii)_ combine the primers correctly to reproduce a pooled primer scheme, and _iii)_ facilitate correct and reproducible bioinformatic analysis of resulting sequencing data. It therefore incorporates both wet lab and analytical elements. This information includes primer sequences, primer pools, coordinates and orientation with respect to a reference sequence, and optionally relative primer concentrations.
 
 == Format overview
 
@@ -64,7 +72,8 @@ Comment lines are minimally parsed, but can optionally contain a scheme-level (k
     [1], [chrom], [String], [Chromosome name], [`[A-Za-z0-9._]`],
     [2], [primerStart], [Integer], [Primer start position (zero-based, half-open)], [Positive integer (`u64`)],
     [3], [primerEnd], [Integer], [Primer end position (zero-based, half-open)], [Positive integer (`u64`)],
-    [4], [primerName], [String], [Primer name], [`[a-zA-Z0-9\-]+_[0-9]+_(LEFT|RIGHT|PROBE)_[0-9]+`],
+    [4], [primerName], [String], [Primer name], [`[a-zA-Z0-9\-]
+    +_[0-9]+_(LEFT|RIGHT|PROBE)_[0-9]+`],
     [5], [pool], [Integer], [Primer pool], [Positive integer (`u64`)],
     [6], [strand], [String], [Primer strand], [`[-+]`],
     [7], [primerSeq], [String], [The nucleotide sequence in 5'#sym.arrow.r 3'], [ASCII non-whitespace characters],
@@ -88,17 +97,17 @@ The start position of the primer on the `chrom` using BED-like zero-based, half-
 The non-inclusive end position of the primer on the `chrom` using BED-like zero-based, half-open coordinates. Must be greater than #highlight[`primerStart`].
 
 === #highlight[`primerName`]
-The name of the primer in the form "`{prefix}_{ampliconNumber}_{direction}_{primerNumber}`".
+The name of the primer in the form "`{prefix}_{ampliconNumber}_{class}_{primerNumber}`".
 - #highlight[`prefix`]: Must match regex `[a-zA-Z0-9\-]`. See best practices
 - #highlight[`ampliconNumber`]: The number of the amplicon for its relevant #highlight[`chrom`]. Must be a positive integer incrementing from 1.
-- #highlight[`direction`]: The direction of the primer. Must be either `LEFT`, `RIGHT` or `PROBE`.
+- #highlight[`primerClass`]: The class of the primer. Must be either `LEFT`, `RIGHT` or `PROBE`.
 - #highlight[`primerNumber`]: The number of the primer. Must be a positive integer incrementing from 1.
 
 === #highlight[`pool`]
 The PCR pool the primer belongs to. Must be a positive integer incrementing from 1 #footnote["Existing schemes/literature use refer to \`pool 1 and pool 2\`. Therefore 1-based indexing is expected"].
 
 === #highlight[`strand`]
-The strand of the primer must be either #highlight[+] or #highlight[-]. It must correspond to the #highlight[direction] component of the #highlight[primerName] (see the description of #highlight[primerName] above). #highlight[LEFT] and #highlight[RIGHT] primers must be #highlight[+] and #highlight[-] respectively, while #highlight[PROBE] can be either.
+The strand of the primer must be either #highlight[+] or #highlight[-]. It must correspond to the #highlight[class] component of the #highlight[primerName] (see the description of #highlight[primerName] above). #highlight[LEFT] and #highlight[RIGHT] primers must be #highlight[+] and #highlight[-] respectively, while #highlight[PROBE] can be either.
 === #highlight[`primerSeq`]
 The sequence of the primer in the 5' to 3' direction. Unrestricted to contain any non-whitespace ASCII character #footnote["This is intentionally unrestricted (rather than IUPAC-only) to allow Primer Modification. Such as `/56-FAM/{primerSeq}` to represent 5' 6-FAM fluorescent dye labelled probe"].
 
@@ -203,7 +212,7 @@ A #highlight[`reference.fasta`] file contains the DNA sequences of all the prima
 
 == Format overview
 
-#highlight[`reference.fasta`] files are typical #highlight[`.fasta`] #link("https://en.wikipedia.org/wiki/FASTA_format")[format files], with text representing the nucleotide sequence of the reference. Each genome starts with a header line (starting with #highlight[`>`]) that denotes the id of the genome, followed by lines of nucleotide data.
+#highlight[`reference.fasta`] files are typical ASCII-encoded #highlight[`.fasta`] #link("https://en.wikipedia.org/wiki/FASTA_format")[format files], with text representing the nucleotide sequence of the reference. Each genome starts with a header line (starting with #highlight[`>`]) that denotes the id of the genome, followed by lines of nucleotide data.
 
 All #highlight[`chrom`] fields of the record lines must have a corresponding id in the #highlight[`reference.fasta`].
 
