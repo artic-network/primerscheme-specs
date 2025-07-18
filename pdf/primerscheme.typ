@@ -111,7 +111,7 @@ The name of the primer in the form "`{prefix}_{ampliconNumber}_{class}_{primerNu
 - #highlight[`primerNumber`]: The number of the primer. Must be a positive integer incrementing from 1.
 
 === #highlight[`pool`]
-The PCR pool the primer belongs to. Must be a positive integer incrementing from 1 #footnote["Existing schemes/literature use refer to \`pool 1 and pool 2\`. Therefore, 1-based indexing is expected"].
+The PCR pool the primer belongs to. Must be a positive integer incrementing from 1 #footnote["Existing schemes/literature refer to \`pool 1 and pool 2\`. Therefore, 1-based indexing is expected"].
 
 === #highlight[`strand`]
 The strand of the primer must be either "`+`" or "`-`". It must correspond to the #highlight[`primerClass`] component of the #highlight[primerName]. `LEFT` and `RIGHT` #highlight[`primerClass`] must be "`+`" and "`-`" respectively, while `PROBE` can be either.
