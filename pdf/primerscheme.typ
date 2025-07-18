@@ -170,7 +170,7 @@ An eight column #highlight[`primer.bed`] file. With #highlight[`primerAttributes
 )
 
 === qPCR example
-An eight column #highlight[`primer.bed`] file. Showing a fictional qPCR assay. The specific dyes and quenchers are (optionally) included in the `comment lines`.
+An eight column #highlight[`primer.bed`] file, showing a fictional qPCR assay. The specific dyes and quenchers are (optionally) included in the `comment lines`.
 #block(
   fill: luma(230),
   inset: 8pt,
