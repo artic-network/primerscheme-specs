@@ -111,16 +111,16 @@ The name of the primer in the form "`{prefix}_{ampliconNumber}_{class}_{primerNu
 - #highlight[`primerNumber`]: The number of the primer. Must be a positive integer incrementing from 1.
 
 === #highlight[`pool`]
-The PCR pool the primer belongs to. Must be a positive integer incrementing from 1 #footnote["Existing schemes/literature use refer to \`pool 1 and pool 2\`. Therefore, 1-based indexing is expected"].
+The PCR pool the primer belongs to. Must be a positive integer incrementing from 1 #footnote["Existing schemes/literature refer to \`pool 1 and pool 2\`. Therefore, 1-based indexing is expected"].
 
 === #highlight[`strand`]
 The strand of the primer must be either "`+`" or "`-`". It must correspond to the #highlight[`primerClass`] component of the #highlight[primerName]. `LEFT` and `RIGHT` #highlight[`primerClass`] must be "`+`" and "`-`" respectively, while `PROBE` can be either.
 
 === #highlight[`primerSeq`]
-The sequence of the primer in the 5' to 3' direction. Unrestricted to contain any non-whitespace ASCII character #footnote["This is intentionally unrestricted (rather than IUPAC-only) to allow Primer Modification. Such as `/56-FAM/{primerSeq}` to represent 5' 6-FAM fluorescent dye labelled probe"].
+The sequence of the primer in the 5' to 3' direction. Unrestricted to contain any non-whitespace ASCII character #footnote["This is intentionally unrestricted (rather than IUPAC-only) to allow Primer Modification, such as `/56-FAM/{primerSeq}` to represent 5' 6-FAM fluorescent dye labelled probe"].
 
 === #highlight[`primerAttributes`]
-An _optional_ list of a (key, value) pairs used to denote additional arbitrary primer attributes, in the form of "`pw=1.0;ps=10.0`". This is intentionally flexible to allow the storage of additional information. In a primer.bed file this can be represented as either an empty 8th column or only 7 columns.
+An _optional_ list of (key, value) pairs used to denote additional arbitrary primer attributes, in the form of "`pw=1.0;ps=10.0`". This is intentionally flexible to allow the storage of additional information. In a primer.bed file this can be represented as either an empty 8th column or only 7 columns.
 
 ==== Reserved keys
 
@@ -170,7 +170,7 @@ An eight column #highlight[`primer.bed`] file. With #highlight[`primerAttributes
 )
 
 === qPCR example
-An eight column #highlight[`primer.bed`] file. Showing a fictional qPCR assay. The specific dyes and quenchers are (optionally) included in the `comment lines`.
+An eight column #highlight[`primer.bed`] file, showing a fictional qPCR assay. The specific dyes and quenchers are (optionally) included in the `comment lines`.
 #block(
   fill: luma(230),
   inset: 8pt,
@@ -272,7 +272,7 @@ The genome contained in the `reference.fasta` file is commonly used for referenc
 DNA sequences are expected and should be the default. As by the nature of PCR, the amplicons and corresponding sequencing data should be DNA. However, RNA is allowed due to possible unforeseen applications.
 
 === Use canonical/publicly available genomes
-The `reference.fasta` will need to be shared to reproduce the downstream analysis. Therefore, using property or restricted will inhibit sharing.
+The `reference.fasta` will need to be shared to reproduce the downstream analysis. Therefore, using proprietary or restricted sequences will inhibit sharing.
 
 
 = Further comments
