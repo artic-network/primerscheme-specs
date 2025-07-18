@@ -20,7 +20,7 @@
     (
       name: "Christopher Kent",
       email: "chrisgkent@protonmail.com",
-      orcid: "0000-0002-7859-8394",
+      orcid: "0000-0003-4269-0153",
       affiliations: (
         "The ARTICnetwork Collaborative Award",
         "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
@@ -41,7 +41,7 @@
   abstract: [Polymerase chain reaction (PCR) followed by amplicon DNA sequencing enables fast, sensitive and cost-effective molecular characterisation of target genes and genomes.
     PCR involves the selective amplification of a target genomic region (amplicons) using pairs of single-stranded oligonucleotide primers, that are complementary to the opposing strands flanking the target region. Multiple regions can be simultaneously amplified in a single reaction via multiplexed PCR, with multiple reactions enabling tiling amplicon sequencing for efficient enrichment of entire microbial genomes. Accurately synthesising a primer scheme and reproducing bioinformatic analysis of amplicon sequencing data depends on knowledge of primer sequences, amplicon layout, and their coordinates with respect to a reference sequence. Analysis and reuse of amplicon sequencing data is currently hindered by the lack of a clearly defined data interchange format for primer scheme definitions, a problem highlighted by the proliferation of SARS-CoV-2 primer schemes during the COVID-19 pandemic. Here, we describe a text-based file format specification for describing primer sequences and locations with respect to a reference sequence. This specification formalises and expands an existing interchange format used in the PrimalScheme primer design tool, since adopted by a growing ecosystem of bioinformatic tooling. This file format specification designates the use of a primer.bed file—based on the Browser Extensible Data (BED) text format—and accompanying reference.fasta text file to define primer schemes and probe-based qPCR assays.
     This specification is intended to facilitate the exchange of machine- and human-readable primer scheme definitions for use in oligonucleotide synthesis, wet lab work, and related bioinformatic analysis.],
-  keywords: ("Primer Schemes", "Amplicon Sequencing", ),
+  keywords: ("Primer Schemes", "Amplicon Sequencing"),
 ))
 
 #let theme = (color: black.darken(20%), font: "Noto Sans")
@@ -105,7 +105,7 @@ The non-inclusive end position of the primer on the `chrom` using BED-like zero-
 
 === #highlight[`primerName`]
 The name of the primer in the form "`{prefix}_{ampliconNumber}_{class}_{primerNumber}`".
-- #highlight[`prefix`]: Must match regex `[a-zA-Z0-9\-]`. See best practices
+- #highlight[`prefix`]: Must match regex `[a-zA-Z0-9\-]`.
 - #highlight[`ampliconNumber`]: The number of the amplicon for its relevant #highlight[`chrom`]. Must be a positive integer incrementing from 1.
 - #highlight[`primerClass`]: The class of the primer. Must be either `LEFT`, `RIGHT` or `PROBE`.
 - #highlight[`primerNumber`]: The number of the primer. Must be a positive integer incrementing from 1.
@@ -117,7 +117,7 @@ The PCR pool the primer belongs to. Must be a positive integer incrementing from
 The strand of the primer must be either "`+`" or "`-`". It must correspond to the #highlight[`primerClass`] component of the #highlight[primerName]. `LEFT` and `RIGHT` #highlight[`primerClass`] must be "`+`" and "`-`" respectively, while `PROBE` can be either.
 
 === #highlight[`primerSeq`]
-The sequence of the primer in the 5' to 3' direction. Unrestricted to contain any non-whitespace ASCII character #footnote["This is intentionally unrestricted (rather than IUPAC-only) to allow Primer Modification, such as `/56-FAM/{primerSeq}` to represent 5' 6-FAM fluorescent dye labelled probe"].
+The sequence of the primer in the 5' to 3' direction that can contain any non-whitespace ASCII character #footnote["This is intentionally unrestricted (rather than IUPAC-only) to allow Primer Modification, such as `/56-FAM/{primerSeq}` to represent 5' 6-FAM fluorescent dye labelled probe"].
 
 === #highlight[`primerAttributes`]
 An _optional_ list of (key, value) pairs used to denote additional arbitrary primer attributes, in the form of "`pw=1.0;ps=10.0`". This is intentionally flexible to allow the storage of additional information. In a primer.bed file this can be represented as either an empty 8th column or only 7 columns.
@@ -278,5 +278,5 @@ The `reference.fasta` will need to be shared to reproduce the downstream analysi
 = Further comments
 
 == Scope
-This minimal specification lays out the structure and usage of the `primer.bed` and `reference.fasta` interchange format, facilitating primer synthesis, wet lab use, and sound bioinformatic analysis of amplicon sequences. Primer scheme _metadata_ is however beyond the scope of this interchange format specification. To maximise the findability, accessibility, interoperability, and reusability (FAIRness) FAIRNESS of primer schemes and associated datasets, coherent naming and versioning of primer scheme assets is essential. Addressing this need, broader primer scheme metadata repositories and related tooling have been developed, including  #link("https://labs.primalscheme.com")[PrimalScheme Labs] (with #link("https://github.com/ChrisgKent/primal-page")[primal-page]) and #link("https://github.com/pha4ge/primer-schemes")[PHA4GE primer-schemes] (with #link("https://github.com/pha4ge/primaschema")[primaschema]).
+This minimal specification lays out the structure and usage of the `primer.bed` and `reference.fasta` interchange format, facilitating primer synthesis, wet lab use, and sound bioinformatic analysis of amplicon sequences. Primer scheme _metadata_ is however beyond the scope of this interchange format specification. To maximise the findability, accessibility, interoperability, and reusability (FAIRness) FAIRNESS of primer schemes and associated datasets, coherent naming and versioning of primer scheme assets is essential. Addressing this need, broader primer scheme metadata repositories and related tooling have been developed, including #link("https://labs.primalscheme.com")[PrimalScheme Labs] (with #link("https://github.com/ChrisgKent/primal-page")[primal-page]) and #link("https://github.com/pha4ge/primer-schemes")[PHA4GE primer-schemes] (with #link("https://github.com/pha4ge/primaschema")[primaschema]).
 
