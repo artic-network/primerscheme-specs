@@ -7,7 +7,7 @@
 #set text(region: "GB")
 
 #let bp_str = block(
-  "Best practices are not required by the specification; however they are strongly recommended.",
+  "Best practices are not part of the specification; however they are strongly recommended.",
   fill: rgb(35, 157, 173, 20%),
   inset: 8pt,
   radius: 2pt,
@@ -20,7 +20,7 @@
     (
       name: "Christopher Kent",
       email: "chrisgkent@protonmail.com",
-      orcid: "0000-0003-4269-0153",
+      orcid: "0000-0002-7859-8394",
       affiliations: (
         "The ARTICnetwork Collaborative Award",
         "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
@@ -39,9 +39,9 @@
   title: "ARTIC primer scheme specification v3.0.0-alpha",
   date: datetime(year: 2025, month: 07, day: 18),
   abstract: [Polymerase chain reaction (PCR) followed by amplicon DNA sequencing enables fast, sensitive and cost-effective molecular characterisation of target genes and genomes.
-    PCR involves the selective amplification of a target genomic region (amplicons) using pairs of single-stranded oligonucleotide primers, that are complementary to the opposing strands flanking the target region. Multiple regions can be simultaneously amplified in a single reaction via multiplexed PCR, with multiple reactions enabling tiling amplicon sequencing (ARTIC sequencing), facilitating efficient enrichment of entire microbial genomes for whole genome sequencing. However, accurately reproducing a primer scheme and the corresponding bioinformatic analysis of amplicon sequencing data depends on knowledge of primer sequences, amplicon layout, and their coordinates with respect to a reference sequence. Analysis and reuse of amplicon sequencing data is currently hindered by the lack of a clearly defined data interchange format for primer scheme definitions, a problem highlighted by the proliferation of SARS-CoV-2 primer schemes during the COVID-19 pandemic. Here, we describe a text-based specification for describing primer sequences and locations with respect to a reference sequence. This specification formalises and expands on the existing interchange format initially used in the PrimalScheme primer design tool, and since adopted by a growing ecosystem of tooling. This specification designates the use of a primer.bed file, based on the Browser Extensible Data (BED) text format, and an accompanying reference.fasta text file for defining primer schemes, and probe-based qPCR assays.
-    This specification is intended to facilitate the exchange of primer scheme definitions for oligonucleotide synthesis, wet-lab and bioinformatic analysis use cases.],
-  keywords: ("Data standards", "Primer Schemes", "Amplicon Sequencing"),
+    PCR involves the selective amplification of a target genomic region (amplicons) using pairs of single-stranded oligonucleotide primers, that are complementary to the opposing strands flanking the target region. Multiple regions can be simultaneously amplified in a single reaction via multiplexed PCR, with multiple reactions enabling tiling amplicon sequencing for efficient enrichment of entire microbial genomes. Accurately synthesising a primer scheme and reproducing bioinformatic analysis of amplicon sequencing data depends on knowledge of primer sequences, amplicon layout, and their coordinates with respect to a reference sequence. Analysis and reuse of amplicon sequencing data is currently hindered by the lack of a clearly defined data interchange format for primer scheme definitions, a problem highlighted by the proliferation of SARS-CoV-2 primer schemes during the COVID-19 pandemic. Here, we describe a text-based file format specification for describing primer sequences and locations with respect to a reference sequence. This specification formalises and expands an existing interchange format used in the PrimalScheme primer design tool, since adopted by a growing ecosystem of bioinformatic tooling. This file format specification designates the use of a primer.bed file—based on the Browser Extensible Data (BED) text format—and accompanying reference.fasta text file to define primer schemes and probe-based qPCR assays.
+    This specification is intended to facilitate the exchange of machine- and human-readable primer scheme definitions for use in oligonucleotide synthesis, wet lab work, and related bioinformatic analysis.],
+  keywords: ("Primer Schemes", "Amplicon Sequencing", ),
 ))
 
 #let theme = (color: black.darken(20%), font: "Noto Sans")
@@ -57,7 +57,7 @@
 #pagebreak()
 
 = primer.bed file
-A primer.bed file describes a primer scheme in machine and human-readable tabular format. Together with an accompanying reference.fasta, its purpose is to encapsulate all of the information needed to _i)_ acquire the primers from suppliers or custom oligonucleotide synthesis, _ii)_ combine the primers correctly to reproduce a pooled primer scheme, and _iii)_ facilitate correct and reproducible bioinformatic analysis of the resulting sequencing data. It therefore incorporates both wet lab and analytical elements. This information includes primer sequences, primer pools, coordinates and orientation with respect to a reference sequence, and optionally relative primer concentrations.
+A primer.bed file describes a primer scheme in machine and human-readable tabular format. Together with an accompanying reference.fasta, its purpose is to encapsulate sufficient information needed to _i)_ acquire primers from third-party suppliers or using in-house oligonucleotide synthesis, _ii)_ optionally combine primers into multiple reaction pools, and _iii)_ facilitate reproducible bioinformatic analysis of the resulting sequencing data. To achieve this, the file format specification incorporates primer sequences, primer pool information, coordinates and orientation with respect to a reference sequence, as well as optional relative primer concentrations.
 
 == Format overview
 
@@ -67,7 +67,7 @@ The format of `primer.bed` is based on Browser Extensible Data (#link("https://s
 
 == Comment Line
 
-Comment lines are minimally parsed, but can optionally contain scheme-level (key, value) pairs. To this end, comment lines containing a single "`=`" will be split, with the left and right sides representing a scheme-level key and value, respectively.
+Comment lines can optionally contain scheme-level (key, value) pairs. To this end, comment lines containing a single "`=`" will be split, with the left and right sides representing a scheme-level key and value, respectively.
 
 == record line (BedLine) field descriptions
 
@@ -194,19 +194,19 @@ An eight column #highlight[`primer.bed`] file. Showing a fictional qPCR assay. T
     ```],
 )
 
-== primer.bed best practices
+== Best practices (primer.bed)
 
 #bp_str
 
 === Use dedicated tooling
 
-While CSV parsing modules should be compatible with parsing bedfiles, they do not carry out valuation, and require additional work to parse #highlight[primerAttribute] and #highlight[primerNames]. #link("https://github.com/ChrisgKent/primalbedtools")[`primalbedtools`] is an open source Python package that carries out parsing, schema validation and conversion, and common operations on #highlight[`primer.bed`] files.
+While CSV parsing modules should be compatible with parsing bedfiles, they do not carry out validation, and require additional work to parse #highlight[primerAttribute] and #highlight[primerNames]. #link("https://github.com/ChrisgKent/primalbedtools")[`primalbedtools`] is an open source Python package that carries out parsing, schema validation and conversion, and common operations on #highlight[`primer.bed`] files.
 
 === Use unique names
 
-The #highlight[`prefix`] component of #highlight[`primerName`] should be as unique as possible (ideally a short UUID, i.e. `359ba5`) and different for each #highlight[`chrom`] and each scheme generation run. Using #highlight[`prefix`] such as "scheme" or "sars-cov-2" might seem tempting, however, it will result in a freezer/LIMS full of identical #highlight[`primerName`]s leading to confusion and pooling mistakes. As an example a primer labelled `scheme_1_LEFT_1` could belong to any scheme.
+From practical experience, the #highlight[`prefix`] component of #highlight[`primerName`] should be as unique as possible (ideally a short UUID, i.e. `359ba5`), and different for each #highlight[`chrom`] and each iteration of scheme during development. Using a #highlight[`prefix`] such as "scheme" or "sars-cov-2" might be tempting, however, it will result in a freezer/LIMS full of identical #highlight[`primerName`]s leading to confusion and pooling mistakes. For example, a primer labelled `scheme_1_LEFT_1` could belong to any scheme.
 
-=== The comment lines
+=== Comment lines
 
 The `comment line`'s `key=value` pattern undergoes limited validation in the specification, and therefore, tooling should implement robust error handling and should avoid using the `comment line` for critical metadata. A suitable use case might be to document custom #highlight[`primerAttributes`] or providing human-readable aliases for different #highlight[`chrom`]s.
 
@@ -261,7 +261,7 @@ The corresponding `primer.bed` file contain `BedLines` with the #highlight[`chro
 The corresponding `primer.bed` file should contain `BedLines` with the #highlight[`chrom`] `MN908947.3` and `NC_006432.1`.
 
 
-== reference.fasta best practices
+== Best practices (reference.fasta)
 
 #bp_str
 
@@ -277,12 +277,6 @@ The `reference.fasta` will need to be shared to reproduce the downstream analysi
 
 = Further comments
 
-== Use encompassing metadata standards
-This specification simply lays out the structure and formatting of the `primer.bed` and `reference.fasta` file, the minimal files used to replicate the primer pools, and the analysis used in multiplexed PCR.
-
-For true reproducibility, each primer scheme should have an explicit name and a semantic versioning system to track changes to the scheme. Therefore, larger metadata standards are required, such as such as #link("https://github.com/ChrisgKent/primal-page")[primal-page] with #link("https://labs.primalscheme.com")[PrimalScheme Labs] or #link("https://github.com/pha4ge/primaschema")[primaschema] with #link("https://github.com/pha4ge/primer-schemes")[pha4ge primer-schemes].
-
-
-
-
+== Scope
+This minimal specification lays out the structure and usage of the `primer.bed` and `reference.fasta` interchange format, facilitating primer synthesis, wet lab use, and sound bioinformatic analysis of amplicon sequences. Primer scheme _metadata_ is however beyond the scope of this interchange format specification. To maximise the findability, accessibility, interoperability, and reusability (FAIRness) FAIRNESS of primer schemes and associated datasets, coherent naming and versioning of primer scheme assets is essential. Addressing this need, broader primer scheme metadata repositories and related tooling have been developed, including  #link("https://labs.primalscheme.com")[PrimalScheme Labs] (with #link("https://github.com/ChrisgKent/primal-page")[primal-page]) and #link("https://github.com/pha4ge/primer-schemes")[PHA4GE primer-schemes] (with #link("https://github.com/pha4ge/primaschema")[primaschema]).
 
