@@ -20,7 +20,7 @@
     (
       name: "Christopher Kent",
       email: "chrisgkent@protonmail.com",
-      orcid: "0000-0002-7859-8394",
+      orcid: "0000-0003-4269-0153",
       affiliations: (
         "The ARTICnetwork Collaborative Award",
         "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
