@@ -6,4 +6,4 @@ PCR amplicon sequencing enables cost-effective whole genome sequencing and chara
 
 
 ## Contributing 
-This specification was designed as a community resource. Therefore, we strong encourage community engagement feed back.  
+This specification was designed as a community resource. Therefore, we strongly encourage community engagement and feedback.  
