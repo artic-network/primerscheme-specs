@@ -272,7 +272,7 @@ The genome contained in the `reference.fasta` file is commonly used for referenc
 DNA sequences are expected and should be the default. As by the nature of PCR, the amplicons and corresponding sequencing data should be DNA. However, RNA is allowed due to possible unforeseen applications.
 
 === Use canonical/publicly available genomes
-The `reference.fasta` will need to be shared to reproduce the downstream analysis. Therefore, using property or restricted will inhibit sharing.
+The `reference.fasta` will need to be shared to reproduce the downstream analysis. Therefore, using proprietary or restricted sequences will inhibit sharing.
 
 
 = Further comments
