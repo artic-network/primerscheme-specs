@@ -1,0 +1,12 @@
+name: Render main.pdf
+on:
+  push:
+    paths:
+      - "pdf/*"
+jobs:
+  render-paper:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: typst-community/setup-typst@v4
+      - run: typst compile pdf/main.typ main.pdf
