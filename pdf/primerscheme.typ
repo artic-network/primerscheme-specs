@@ -120,7 +120,7 @@ The strand of the primer must be either "`+`" or "`-`". It must correspond to th
 The sequence of the primer in the 5' to 3' direction. Unrestricted to contain any non-whitespace ASCII character #footnote["This is intentionally unrestricted (rather than IUPAC-only) to allow Primer Modification. Such as `/56-FAM/{primerSeq}` to represent 5' 6-FAM fluorescent dye labelled probe"].
 
 === #highlight[`primerAttributes`]
-An _optional_ list of a (key, value) pairs used to denote additional arbitrary primer attributes, in the form of "`pw=1.0;ps=10.0`". This is intentionally flexible to allow the storage of additional information. In a primer.bed file this can be represented as either an empty 8th column or only 7 columns.
+An _optional_ list of (key, value) pairs used to denote additional arbitrary primer attributes, in the form of "`pw=1.0;ps=10.0`". This is intentionally flexible to allow the storage of additional information. In a primer.bed file this can be represented as either an empty 8th column or only 7 columns.
 
 ==== Reserved keys
 
