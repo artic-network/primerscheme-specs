@@ -35,6 +35,13 @@
         "Institute of Microbiology and Infection, University of Birmingham, Birmingham, UK.",
       ),
     ),
+    (
+      name: "Peter van Heusden",
+      orcid: "0000-0001-6553-5274",
+      affiliations: (
+        "South African National Bioinformatics Institute, University of the Western Cape"
+      ),
+    ),
   ),
   title: "ARTIC primer scheme specification v3.0.0-alpha",
   date: datetime(year: 2025, month: 07, day: 18),
